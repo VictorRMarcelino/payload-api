@@ -1,0 +1,15 @@
+{
+    "name": "payload-api/payload-api",
+    "description": "API payload",
+    "authors": [
+        {
+            "name": "Victor Ramos",
+            "email": "httpsvictorramos@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "src\\": "src/"
+        }
+    }
+}
