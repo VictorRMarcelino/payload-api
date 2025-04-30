@@ -4,6 +4,9 @@ O projeto não tem a menor intenção de realizar alguma participação na compe
 Caso tenha interesse em ver mais sobre as informações da competição, segue o link da mesma:
 [text](https://github.com/zanfranceschi/rinha-de-backend-2024-q1)
 
+endpoint transações: /clientes/[id]/transacoes - Método POST
+endpoint extrato: /clientes/[id]/extrato - Método GET
+
 [Regras de Negócio]
 RN1 - Uma transação pode ser do tipo crédito ou débito.
 RN2 - Uma transação não pode deixar o saldo do cliente menor que seu limite.
