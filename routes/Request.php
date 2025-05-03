@@ -2,6 +2,8 @@
 
 namespace routes;
 
+use Exception;
+
 /**
  * Request
  * @package routes
@@ -12,7 +14,7 @@ class Request {
 
     private $method;
     private $url;
-    private $idClient;
+    private $parameters;
 
     /**
      * Get the value of method
@@ -47,49 +49,59 @@ class Request {
     }
 
     /**
-     * Get the value of idClient
-     * @return int
+     * Get the value of parameters
+     * @param string $sParameter
+     * @param boolean $bThrowException
      */ 
-    public function getIdClient(){
-        return $this->idClient;
+    public function getParameter($sParameter = false, $bThrowException = true){
+        if ($sParameter){
+            if (!isset($this->parameters[$sParameter])){
+                throw new Exception("O parâmetro $sParameter não existe na requisição");
+            }
+
+            return $this->parameters[$sParameter];
+        }
+
+        return $this->parameters;
     }
 
     /**
-     * Set the value of idClient
-     * @param int
+     * Set the value of parameters
+     * @param array $parameters
      */ 
-    public function setIdClient($idClient){
-        $this->idClient = $idClient;
+    private function setParameters($parameters){
+        $this->parameters = $parameters;
     }
 
     public function __construct() {
         $this->setMethod($_SERVER['REQUEST_METHOD']);
-        list($sUrl, $iIdClient) = $this->extractIdUserUrl();
-        $this->setUrl($sUrl);
-        $this->setIdClient($iIdClient);
-    }
-
-    /**
-     * Return a static instance of Request
-     * @return Request
-     */
-    public static function getInstance() {
-        static $instance;
-
-        if (!isset($instance)) {
-            $instance = new Request();
-        }
-
-        return $instance;
+        $this->setUrl($this->loadUrl());
+        $this->loadParameters();
     }
 
     /**
      * Extract the ID of the user from the URL
-     * @return array
+     * @return string
      */
-    private function extractIdUserUrl() {
+    private function loadUrl() {
         $aUrl = explode('/', $_SERVER['REQUEST_URI']);
         $sUrl = $aUrl[1] . '/' . $aUrl[3];
-        return [$sUrl, $aUrl[2]];
+        return $sUrl;
+    }
+
+    /**
+     * Load the parameters send from the request
+     * @return void
+     */
+    private function loadParameters() {
+        $aBodyRequest = json_decode(file_get_contents('php://input'), true);
+        $aUrl = explode('/', $_SERVER['REQUEST_URI']);
+
+        if (!isset($aUrl[2]) || !is_numeric($aUrl[2])) {
+            //@todo apply exception
+        }
+
+        $aIdClient = ["idClient" => $aUrl[2]];
+        $this->setParameters(array_merge($aIdClient, $aBodyRequest, $_GET));
     }
 }
