@@ -8,10 +8,11 @@
         }
     ],
     "autoload": {
+        "files": [
+            "src/exception/ApiException.php"
+        ],
         "psr-4": {
-            "src\\": "src/",
-            "routes\\": "routes/",
-            "database\\": "database/"
+            "src\\": "src/"
         }
     }
 }
