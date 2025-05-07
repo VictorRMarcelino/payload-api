@@ -1,6 +1,6 @@
 <?php
 
-namespace routes;
+namespace src\routes;
 
 use Exception;
 
@@ -98,7 +98,7 @@ class Request {
         $aUrl = explode('/', $_SERVER['REQUEST_URI']);
 
         if (!isset($aUrl[2]) || !is_numeric($aUrl[2])) {
-            //@todo apply exception
+            throw new Exception('O ID do cliente é inválido ou não foi recebido!', 400);
         }
 
         $aIdClient = ["idClient" => $aUrl[2]];

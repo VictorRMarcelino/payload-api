@@ -1,9 +1,8 @@
 <?php
 
-namespace routes;
+namespace src\routes;
 
 use Exception;
-use src\controller\ControllerTransaction;
 
 /**
  * Router
@@ -24,7 +23,6 @@ class Router {
 
         if (!isset($instance)) {
             $instance = new Router();
-            $instance->addRoutes();
         }
 
         return $instance;
@@ -35,8 +33,8 @@ class Router {
      * @param string $route
      * @param mixed $fn
      */
-    private function get($route, $fn) {
-        $this->routes['get'][$route] = $fn;
+    public static function get($route, $fn) {
+        self::getInstance()->routes['get'][$route] = $fn;
     }
 
     /**
@@ -44,35 +42,24 @@ class Router {
      * @param string $route
      * @param mixed $fn
      */
-    private function post($route, $fn) {
-        $this->routes['post'][$route] = $fn;
-    }
-
-    /**
-     * Add the routes
-     */
-    private function addRoutes() {
-        $this->get('clientes/extrato', function(){});
-
-        $this->post('clientes/transacoes', function(Request $oRequest){
-            $oControllerTransaction = new ControllerTransaction();
-            $oControllerTransaction->doTransaction($oRequest);
-        });
+    public static function post($route, $fn) {
+        self::getInstance()->routes['post'][$route] = $fn;
     }
 
     /**
      * Process a request
      * @return void
      */
-    public function doRequest() {
+    public static function doRequest() {
+        $oRouter = self::getInstance();
         $oRequest = new Request();
         $sMethodRequest = strtolower($oRequest->getMethod());
         $sUrl = $oRequest->getUrl();
 
-        if (!isset($this->routes[$sMethodRequest][$sUrl])) {
+        if (!isset($oRouter->routes[$sMethodRequest][$sUrl])) {
             throw new Exception("O endpoint informado não existe!", 404);
         }
 
-        call_user_func_array($this->routes[$sMethodRequest][$sUrl], [$oRequest]);
+        call_user_func_array($oRouter->routes[$sMethodRequest][$sUrl], [$oRequest]);
     }
 }

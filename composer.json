@@ -9,7 +9,8 @@
     ],
     "autoload": {
         "files": [
-            "src/exception/ApiException.php"
+            "src/exception/ApiException.php",
+            "src/routes/api.php"
         ],
         "psr-4": {
             "src\\": "src/"
