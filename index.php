@@ -1,7 +1,7 @@
 <?php
 
-use routes\Router;
+use src\routes\Router;
 
 require_once 'vendor/autoload.php';
 
-Router::getInstance()->doRequest();
+Router::doRequest();
