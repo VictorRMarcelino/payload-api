@@ -1,6 +1,6 @@
 <?php
 
-set_exception_handler(function(Exception $oException) {
+set_exception_handler(function($oException) {
     http_response_code($oException->getCode());
     $aResponse = [];
     $aResponse['code'] = $oException->getCode();
