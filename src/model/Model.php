@@ -2,7 +2,7 @@
 
 namespace src\model;
 
-use src\database\Migration;
+use database\Migration;
 
 /**
  * Model
@@ -25,9 +25,10 @@ abstract class Model {
             $sClassName = get_class($this);
             $aClassName = explode('\\', $sClassName);
             $sMigrationName = preg_replace('/Model/', '', $aClassName[2]);
-            $sMigration = '\src\database\Migration';
+            $sMigration = 'src\\migrations\Migration' . $sMigrationName;
             $this->Migration = new $sMigration();
             $this->Migration->setModel($this);
+            $this->Migration->setOriginal(clone $this);
         }
 
         return $this->Migration;
@@ -41,10 +42,39 @@ abstract class Model {
         $this->Migration = $Migration;
     }
 
+    public function __construct() {
+        $this->getMigration();        
+    }
+
     /**
      * Load an instance with the database data
      */
     public function load() {
-        //@todo implements load model function
+        $this->getMigration()->loadModel();
+    }
+
+    /**
+     * Insert the model in the database
+     * @return boolean
+     */
+    public function insert() {
+        return $this->getMigration()->insert();
+    }
+    
+    /**
+     * Update the model in the database
+     * @return boolean
+     */
+    public function update() {
+        return $this->getMigration()->update();
+    }
+
+    /**
+     * Return all register with specific conditions
+     * @param array $aConditions
+     * @return array
+     */
+    public function where(array $aConditions) {
+        return $this->getMigration()->where($aConditions);
     }
 }

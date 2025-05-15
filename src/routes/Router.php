@@ -12,7 +12,10 @@ use Exception;
  */
 class Router {
 
-    protected $routes = [];
+    protected $routes = [
+        Request::METHOD_GET  => [],
+        Request::METHOD_POST => []
+    ];
     
     /**
      * Return a static instance of Router
@@ -34,7 +37,7 @@ class Router {
      * @param mixed $fn
      */
     public static function get($route, $fn) {
-        self::getInstance()->routes['get'][$route] = $fn;
+        self::getInstance()->routes[Request::METHOD_GET][$route] = $fn;
     }
 
     /**
@@ -43,7 +46,7 @@ class Router {
      * @param mixed $fn
      */
     public static function post($route, $fn) {
-        self::getInstance()->routes['post'][$route] = $fn;
+        self::getInstance()->routes[Request::METHOD_POST][$route] = $fn;
     }
 
     /**
@@ -51,15 +54,30 @@ class Router {
      * @return void
      */
     public static function doRequest() {
-        $oRouter = self::getInstance();
-        $oRequest = new Request();
+        $oRouter        = self::getInstance();
+        $oRequest       = Request::getInstance();
         $sMethodRequest = strtolower($oRequest->getMethod());
-        $sUrl = $oRequest->getUrl();
+        $sUrl           = $oRequest->getUrl();
 
         if (!isset($oRouter->routes[$sMethodRequest][$sUrl])) {
             throw new Exception("O endpoint informado não existe!", 404);
         }
 
         call_user_func_array($oRouter->routes[$sMethodRequest][$sUrl], [$oRequest]);
+    }
+
+    /**
+     * Send a response to the request
+     * @param array $aData
+     * @param int $iCode
+     * @return void
+     */
+    public static function response(array $aData, $iCode = 200) {
+        if (!is_integer($iCode)) {
+            $iCode = 500;
+        }
+        
+        http_response_code($iCode);
+        echo json_encode($aData);
     }
 }

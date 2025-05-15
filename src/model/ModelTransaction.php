@@ -3,42 +3,35 @@
 namespace src\model;
 
 /**
- * Model Client Transaction
+ * Model Transaction
  * @package    src
  * @subpackage model
  * @author     VictorRamos <httpsvictorramos@gmail.com>
  * @since      30/04/2025
  */
-class ModelClientTransaction extends Model{
+class ModelTransaction extends Model{
     
-    /**
-     * @var ModelClient
-     */
-    private $Client;
-
+    private $id;
     private $value;
     private $type;
     private $description;
+    private $timestamp;
+    private $idclient;
 
     /**
-     * Get the value of Client
-     * @return ModelClient
+     * Get the value of id
+     * @return int
      */ 
-    public function getClient(){
-        if (!isset($this->Client)){
-            $this->Client = new ModelClient();
-        }
-
-        return $this->Client;
+    public function getId(){
+        return $this->id;
     }
 
     /**
-     * Set the value of Client
-     *
-     * @param ModelClient $Client
+     * Set the value of id
+     * @param int
      */ 
-    public function setClient(ModelClient $Client){
-        $this->Client = $Client;
+    public function setId($id){
+        $this->id = $id;
     }
 
     /**
@@ -87,5 +80,37 @@ class ModelClientTransaction extends Model{
      */ 
     public function setDescription($description){
         $this->description = $description;
+    }
+
+    /**
+     * Get the value of idclient
+     * @return integer
+     */ 
+    public function getIdclient(){
+        return $this->idclient;
+    }
+
+    /**
+     * Set the value of idclient
+     * @param integer $idclient
+     */ 
+    public function setIdclient($idclient){
+        $this->idclient = $idclient;
+    }
+
+    /**
+     * Get the value of timestamp
+     * @return string
+     */ 
+    public function getTimestamp(){
+        return $this->timestamp;
+    }
+
+    /**
+     * Set the value of timestamp
+     * @param string
+     */ 
+    public function setTimestamp($timestamp){
+        $this->timestamp = $timestamp;
     }
 }

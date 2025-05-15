@@ -13,7 +13,8 @@
             "src/routes/api.php"
         ],
         "psr-4": {
-            "src\\": "src/"
+            "src\\": "src/",
+            "database\\": "database/"
         }
     }
 }

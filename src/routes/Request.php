@@ -12,6 +12,9 @@ use Exception;
  */
 class Request {
 
+    const METHOD_GET  = 'get',
+          METHOD_POST = 'post';
+
     private $method;
     private $url;
     private $parameters;
@@ -80,6 +83,20 @@ class Request {
     }
 
     /**
+     * Return a static instance of Request
+     * @return Request
+     */
+    public static function getInstance() {
+        static $instance = null;
+
+        if (!isset($instance)) {
+            $instance = new Request();
+        }
+
+        return $instance;
+    }
+
+    /**
      * Extract the ID of the user from the URL
      * @return string
      */
@@ -95,6 +112,11 @@ class Request {
      */
     private function loadParameters() {
         $aBodyRequest = json_decode(file_get_contents('php://input'), true);
+
+        if (!is_array($aBodyRequest)) {
+            $aBodyRequest = [];
+        }
+
         $aUrl = explode('/', $_SERVER['REQUEST_URI']);
 
         if (!isset($aUrl[2]) || !is_numeric($aUrl[2])) {
